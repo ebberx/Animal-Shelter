@@ -10,9 +10,8 @@ import javafx.stage.Stage;
 import java.sql.SQLException;
 import java.util.*;
 
-public class tabSchedule {
+public class tabWeekly {
 
-    ArrayList<ComboBox<String>> comboBoxArrayList = new ArrayList<>();
     DateGenerator date = new DateGenerator();
 
     private GridPane gridPane;
@@ -22,13 +21,11 @@ public class tabSchedule {
     static String chosenShelter = "EASV Shelter";
     static Label labelMon, labelTue, labelWed, labelThu, labelFri, labelSat, labelSun, title, subTitle;
 
-    public tabSchedule() {
+    public tabWeekly() {
 
     }
 
-    public VBox getTabSchedule(Tab tab) throws SQLException {
-
-
+    public VBox getTabWeekly(Tab tab) throws SQLException {
 
         VBox vBox = new VBox();
         //vBox.setStyle("-fx-background-color: #f5f5f5");
@@ -114,7 +111,7 @@ public class tabSchedule {
         gridPane.setPadding(new Insets(10, 10, 10, 10));
         VBox.setMargin(gridPane, new Insets(5, 5, 5, 5));
 
-        final int numCols = 8;
+        final int numCols = 2;
         final int numRows = 12;
 
         for (int i = 0; i < numCols; i++) {
@@ -135,90 +132,31 @@ public class tabSchedule {
 
     public void addCollectedContent(GridPane gridPane) throws SQLException {
 
-        addDates(gridPane);
-        addDays(gridPane);
         addButtons(gridPane);
         addCategoryLabels(gridPane);
         addSpots(gridPane);
 
     }
 
-    public void addDates(GridPane gridPane) {
-
-        labelMon = new Label(date.getDate(tabSchedule.chosenWeek, 2, tabSchedule.chosenYear));
-        gridPane.add(labelMon, 1, 0);
-        GridPane.setHalignment(labelMon, HPos.CENTER);
-
-        labelTue = new Label(date.getDate(tabSchedule.chosenWeek, 3, tabSchedule.chosenYear));
-        gridPane.add(labelTue, 2, 0);
-        GridPane.setHalignment(labelTue, HPos.CENTER);
-
-        labelWed = new Label(date.getDate(tabSchedule.chosenWeek, 4, tabSchedule.chosenYear));
-        gridPane.add(labelWed, 3, 0);
-        GridPane.setHalignment(labelWed, HPos.CENTER);
-
-        labelThu = new Label(date.getDate(tabSchedule.chosenWeek, 5, tabSchedule.chosenYear));
-        gridPane.add(labelThu, 4, 0);
-        GridPane.setHalignment(labelThu, HPos.CENTER);
-
-        labelFri = new Label(date.getDate(tabSchedule.chosenWeek, 6, tabSchedule.chosenYear));
-        gridPane.add(labelFri, 5, 0);
-        GridPane.setHalignment(labelFri, HPos.CENTER);
-
-        labelSat = new Label(date.getDate(tabSchedule.chosenWeek, 7, tabSchedule.chosenYear));
-        gridPane.add(labelSat, 6, 0);
-        GridPane.setHalignment(labelSat, HPos.CENTER);
-
-        labelSun = new Label(date.getDate(tabSchedule.chosenWeek, 1, tabSchedule.chosenYear));
-        gridPane.add(labelSun, 7, 0);
-        GridPane.setHalignment(labelSun, HPos.CENTER);
-
-    }
-
-    public void updateDate() {
-        labelMon.setText(date.getDate(tabSchedule.chosenWeek, 2, tabSchedule.chosenYear));
-        labelTue.setText(date.getDate(tabSchedule.chosenWeek, 3, tabSchedule.chosenYear));
-        labelWed.setText(date.getDate(tabSchedule.chosenWeek, 4, tabSchedule.chosenYear));
-        labelThu.setText(date.getDate(tabSchedule.chosenWeek, 5, tabSchedule.chosenYear));
-        labelFri.setText(date.getDate(tabSchedule.chosenWeek, 6, tabSchedule.chosenYear));
-        labelSat.setText(date.getDate(tabSchedule.chosenWeek, 7, tabSchedule.chosenYear));
-        labelSun.setText(date.getDate(tabSchedule.chosenWeek, 1, tabSchedule.chosenYear));
-
-        title.setText(chosenShelter);
-        subTitle.setText("Week " + chosenWeek);
-
-        popUp.popText("Week " + chosenWeek + "\nYear " + chosenYear, "black", "18", Application.stage);
-    }
 
     public void addCategoryLabels(GridPane gridPane) {
 
         Label labelSpot = new Label("Spot");
+        labelSpot.setStyle("-fx-font-weight: 800");
         GridPane.setHalignment(labelSpot, HPos.CENTER);
 
-        gridPane.add(labelSpot, 0, 1);
+        gridPane.add(labelSpot, 0, 0);
+
+        Label labelStatus = new Label("Status");
+        labelStatus.setStyle("-fx-font-weight: 800");
+        GridPane.setHalignment(labelStatus, HPos.CENTER);
+
+        gridPane.add(labelStatus, 1, 0);
 
     }
-
-    public void addDays(GridPane gridPane) {
-
-        List<Label> weekdays = new ArrayList<>();
-        Collections.addAll(weekdays, new Label("Monday"), new Label("Tuesday"), new Label("Wednesday"), new Label("Thursday"),
-                new Label("Friday"), new Label("Saturday"), new Label("Sunday"));
-
-        int weekdaysIndex = 0;
-        for (int col = 1; col <= gridPane.getColumnConstraints().size() - 1; col++) {
-
-            weekdays.get(weekdaysIndex).setStyle("-fx-font-weight: 800");
-            gridPane.add(weekdays.get(weekdaysIndex), col, 1);
-            GridPane.setHalignment(weekdays.get(weekdaysIndex), HPos.CENTER);
-            weekdaysIndex++;
-
-        }
-    }
-
 
     public void addButtons(GridPane gridPane) {
-        for (int row = 2; row < gridPane.getRowConstraints().size(); row++) {
+        for (int row = 1; row < gridPane.getRowConstraints().size(); row++) {
             for (int col = 1; col < gridPane.getColumnConstraints().size(); col++) {
 
                 Button buttonBook = new Button("Available");
@@ -237,7 +175,7 @@ public class tabSchedule {
     public void addSpots(GridPane gridPane) {
 
         int no = 1;
-        for (int row = 2; row < gridPane.getRowConstraints().size(); row++) {
+        for (int row = 1; row < gridPane.getRowConstraints().size(); row++) {
 
             Label labelSpot = new Label("Spot #" + no++);
             GridPane.setHalignment(labelSpot, HPos.CENTER);
@@ -246,10 +184,18 @@ public class tabSchedule {
         }
     }
 
+    public void updateDate() {
+
+        title.setText(chosenShelter);
+        subTitle.setText("Week " + chosenWeek);
+
+        popUp.popText("Week " + chosenWeek + "\nYear " + chosenYear, "black", "18", Application.stage);
+    }
+
     private void createBooking() {
 
         final double dialogWidth = 450;
-        final double dialogHeight = 400;
+        final double dialogHeight = 375;
 
         // Starting procedures and Set the Scene
         final Stage dialog = new Stage();
@@ -276,7 +222,7 @@ public class tabSchedule {
 
         // Dimensions of GridPane
         final int numCols = 2 ;
-        final int numRows = 6 ;
+        final int numRows = 5 ;
 
         // Sets the width of the first column
         ColumnConstraints colConst0 = new ColumnConstraints(150);
@@ -299,43 +245,38 @@ public class tabSchedule {
         // Creating Labels for GridPane
         Label labelName = new Label("Name of Customer:");
         Label labelPetName = new Label("Name of Pet:");
-        Label labelArea = new Label("Area:");
-        Label labelDoA = new Label("Date of Arrival:");
-        Label labelDoD = new Label("Date of Depature:");
+        Label labelSpot = new Label("Spot:");
+        Label labelWeek = new Label("Week of stay:");
         Label labelNotes = new Label("Notes:");
 
-        // Adding Labels to Gridpane
+        // Adding Labels to GridPane
         gridPane.add(labelName, 0, 0);
         gridPane.add(labelPetName, 0, 1);
-        gridPane.add(labelArea, 0, 2);
-        gridPane.add(labelDoA, 0, 3);
-        gridPane.add(labelDoD, 0, 4);
-        gridPane.add(labelNotes, 0, 5);
+        gridPane.add(labelSpot, 0, 2);
+        gridPane.add(labelWeek, 0, 3);
+        gridPane.add(labelNotes, 0, 4);
 
         // Adding Selection Options
         TextField name = new TextField();
         name.setMaxWidth(Double.MAX_VALUE);
         gridPane.add(name, 1, 0);
 
-        TextField lastName = new TextField();
-        lastName.setMaxWidth(Double.MAX_VALUE);
-        gridPane.add(lastName, 1, 1);
+        TextField petName = new TextField();
+        petName.setMaxWidth(Double.MAX_VALUE);
+        gridPane.add(petName, 1, 1);
 
-        ChoiceBox<String> department = new ChoiceBox<>();
-        department.setMaxWidth(Double.MAX_VALUE);
-        gridPane.add(department, 1, 2);
+        ChoiceBox<String> spot = new ChoiceBox<>();
+        spot.setMaxWidth(Double.MAX_VALUE);
+        spot.getItems().addAll("1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
+        gridPane.add(spot, 1, 2);
 
-        ChoiceBox<String> function = new ChoiceBox<>();
-        function.setMaxWidth(Double.MAX_VALUE);
-        gridPane.add(function, 1, 3);
-
-        ChoiceBox<String> contract = new ChoiceBox<>();
-        contract.setMaxWidth(Double.MAX_VALUE);
-        gridPane.add(contract, 1, 4);
+        TextField textFieldSpot = new TextField();
+        textFieldSpot.setMaxWidth(Double.MAX_VALUE);
+        gridPane.add(textFieldSpot, 1, 3);
 
         TextArea comments = new TextArea();
         comments.setMaxWidth(Double.MAX_VALUE);
-        gridPane.add(comments, 1, 5);
+        gridPane.add(comments, 1, 4);
 
         // Add ToolBar to Bottom of Dialog
         ToolBar toolBar = new ToolBar();

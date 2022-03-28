@@ -9,12 +9,14 @@ import javafx.stage.Stage;
 public class Application extends javafx.application.Application {
 
     TopBar topBar = new TopBar();
+    tabWeekly tabWeekly = new tabWeekly();
     tabSchedule tabSchedule = new tabSchedule();
     tabBookings tabBookings = new tabBookings();
     public static Stage stage;
+    public static Scene applicationScene;
 
-    double minWidth = 1150;
-    double minHeight = 600;
+    public double minWidth = 1150;
+    public double minHeight = 600;
 
 
     @Override
@@ -23,7 +25,7 @@ public class Application extends javafx.application.Application {
         // Starting procedures and Set the Scene
         this.stage = stage;
         VBox root = new VBox();
-        Scene applicationScene = new Scene(root, minWidth, minHeight);
+        applicationScene = new Scene(root, minWidth, minHeight);
 
         // Add MenuBar to top of application
         root.getChildren().add(topBar.getMenus());
@@ -40,15 +42,19 @@ public class Application extends javafx.application.Application {
         // Creating the tabs
         Tab tab1 = new Tab("Schedule");
         Tab tab2 = new Tab("Bookings");
+        Tab tab3 = new Tab("Weekly [PROTOTYPE]");
 
         // Adding tabs to the tab pane
-        tabPane.getTabs().addAll(tab1, tab2);
+        tabPane.getTabs().addAll(tab1, tab2, tab3);
 
         // Fetch Tab for Schedule
         tab1.setContent(tabSchedule.getTabSchedule(tab1));
 
         // Fetch Tab for Bookings
         tab2.setContent(tabBookings.getTabBookings(tab2));
+
+        // Fetch Tab for Bookings
+        tab3.setContent(tabWeekly.getTabWeekly(tab3));
 
         // Rules
         stage.setMinWidth(minWidth);

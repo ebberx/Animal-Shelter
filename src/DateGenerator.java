@@ -17,4 +17,5 @@ public class DateGenerator {
 
         return sdf.format(cal.getTime());
     }
+
 }
