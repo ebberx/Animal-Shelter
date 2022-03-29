@@ -6,6 +6,8 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.sql.ResultSet;
+
 public class Application extends javafx.application.Application {
 
     TopBar topBar = new TopBar();
@@ -21,7 +23,6 @@ public class Application extends javafx.application.Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-
         // Starting procedures and Set the Scene
         this.stage = stage;
         VBox root = new VBox();

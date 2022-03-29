@@ -21,7 +21,6 @@ public class tabWeekly {
     static int chosenYear = 2022;
     static String chosenShelter = "EASV Shelter";
     static Label title, subTitle;
-    boolean customerInDB = false;
 
     public tabWeekly() {
 
@@ -296,12 +295,20 @@ public class tabWeekly {
 
         phone.setOnKeyPressed(event -> {
             if (event.getCode().equals(KeyCode.ENTER)) {
-                if (customerInDB) {
-                    popUp.popText("Customer found!", "black", "18", Application.stage);
-                    name.setText("GET NAME FROM DB WHERE NUMBER = THIS");
-                    petName.setText("GET NAME FROM DB WHERE NUMBER = THIS");
+                // Get customer from DB
+                String customer = DB.getRegisteredCustomer(phone.getText());
+
+                if (customer != "") {
+                    popUp.popText("Customer found!", "black", "18", dialog);
+
+                    // ID|Customer_Name|Customer_Address|Customer_Phone
+                    String[] custInfo = customer.split("\\|");
+                    String custPetName = DB.getPetName(custInfo[0]); // Get pet name from db
+
+                    name.setText(custInfo[1]);
+                    petName.setText(custPetName);
                 } else {
-                    popUp.popText("Customer not in database!", "black", "18", Application.stage);
+                    popUp.popText("Customer not in database!", "black", "18", dialog);
                 }
             }
         });
@@ -333,7 +340,6 @@ public class tabWeekly {
                     "easvanimalshelter@gmail.com",
                     "Receipt for booking",
                     "Dear + name + we are pleased to inform you that your booking for the + week + is confirmed"
-                    + mailSender.signatur()
             );
         });
 
