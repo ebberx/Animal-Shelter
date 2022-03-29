@@ -3,6 +3,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -19,7 +20,8 @@ public class tabWeekly {
     static int chosenWeek = 13;
     static int chosenYear = 2022;
     static String chosenShelter = "EASV Shelter";
-    static Label labelMon, labelTue, labelWed, labelThu, labelFri, labelSat, labelSun, title, subTitle;
+    static Label title, subTitle;
+    boolean customerInDB = false;
 
     public tabWeekly() {
 
@@ -195,7 +197,7 @@ public class tabWeekly {
     private void createBooking() {
 
         final double dialogWidth = 450;
-        final double dialogHeight = 375;
+        final double dialogHeight = 450;
 
         // Starting procedures and Set the Scene
         final Stage dialog = new Stage();
@@ -222,7 +224,7 @@ public class tabWeekly {
 
         // Dimensions of GridPane
         final int numCols = 2 ;
-        final int numRows = 5 ;
+        final int numRows = 7 ;
 
         // Sets the width of the first column
         ColumnConstraints colConst0 = new ColumnConstraints(150);
@@ -243,6 +245,8 @@ public class tabWeekly {
         }
 
         // Creating Labels for GridPane
+        Label labelPhone = new Label("Phone Number:");
+        Label labelMail = new Label("E-mail:");
         Label labelName = new Label("Name of Customer:");
         Label labelPetName = new Label("Name of Pet:");
         Label labelSpot = new Label("Spot:");
@@ -250,33 +254,57 @@ public class tabWeekly {
         Label labelNotes = new Label("Notes:");
 
         // Adding Labels to GridPane
-        gridPane.add(labelName, 0, 0);
-        gridPane.add(labelPetName, 0, 1);
-        gridPane.add(labelSpot, 0, 2);
-        gridPane.add(labelWeek, 0, 3);
-        gridPane.add(labelNotes, 0, 4);
+        gridPane.add(labelPhone, 0, 0);
+        gridPane.add(labelMail, 0, 1);
+        gridPane.add(labelName, 0, 2);
+        gridPane.add(labelPetName, 0, 3);
+        gridPane.add(labelSpot, 0, 4);
+        gridPane.add(labelWeek, 0, 5);
+        gridPane.add(labelNotes, 0, 6);
+
+        // TextField for entering phone number
+        TextField phone = new TextField();
+        phone.setMaxWidth(Double.MAX_VALUE);
+        gridPane.add(phone, 1, 0);
+
+        // Adding Selection Options
+        TextField mail = new TextField();
+        mail.setMaxWidth(Double.MAX_VALUE);
+        gridPane.add(mail, 1, 1);
 
         // Adding Selection Options
         TextField name = new TextField();
         name.setMaxWidth(Double.MAX_VALUE);
-        gridPane.add(name, 1, 0);
+        gridPane.add(name, 1, 2);
 
         TextField petName = new TextField();
         petName.setMaxWidth(Double.MAX_VALUE);
-        gridPane.add(petName, 1, 1);
+        gridPane.add(petName, 1, 3);
 
         ChoiceBox<String> spot = new ChoiceBox<>();
         spot.setMaxWidth(Double.MAX_VALUE);
         spot.getItems().addAll("1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
-        gridPane.add(spot, 1, 2);
+        gridPane.add(spot, 1, 4);
 
         TextField textFieldSpot = new TextField();
         textFieldSpot.setMaxWidth(Double.MAX_VALUE);
-        gridPane.add(textFieldSpot, 1, 3);
+        gridPane.add(textFieldSpot, 1, 5);
 
         TextArea comments = new TextArea();
         comments.setMaxWidth(Double.MAX_VALUE);
-        gridPane.add(comments, 1, 4);
+        gridPane.add(comments, 1, 6);
+
+        phone.setOnKeyPressed(event -> {
+            if (event.getCode().equals(KeyCode.ENTER)) {
+                if (customerInDB) {
+                    popUp.popText("Customer found!", "black", "18", Application.stage);
+                    name.setText("GET NAME FROM DB WHERE NUMBER = THIS");
+                    petName.setText("GET NAME FROM DB WHERE NUMBER = THIS");
+                } else {
+                    popUp.popText("Customer not in database!", "black", "18", Application.stage);
+                }
+            }
+        });
 
         // Add ToolBar to Bottom of Dialog
         ToolBar toolBar = new ToolBar();
