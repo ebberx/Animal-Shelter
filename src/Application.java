@@ -23,10 +23,6 @@ public class Application extends javafx.application.Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-
-        System.out.println(DB.availableCages(2));
-        System.out.println(DB.availableCages(3));
-
         // Starting procedures and Set the Scene
         this.stage = stage;
         VBox root = new VBox();

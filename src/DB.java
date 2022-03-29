@@ -2,6 +2,7 @@ import javax.xml.transform.Result;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Properties;
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -66,5 +67,48 @@ public class DB {
         }
         disconnect();
         return -1;
+    }
+
+    // Returns format:
+    // ID|Customer_Name|Customer_Address|Customer_Phone
+    //
+    public static String getRegisteredCustomer(String number) {
+        connect();
+        try {
+            PreparedStatement ps = con.prepareStatement("select * from tblCustomer where Customer_Phone = '"+number+"'");
+            ResultSet rs = ps.executeQuery();
+            ArrayList<String> col = new ArrayList<>();
+            while (rs.next())
+            {
+                ArrayList<String> row = new ArrayList<>();
+                for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++)
+                {
+                    row.add(rs.getString(i));
+                }
+                col.add(String.join("|",row));
+            }
+            if(col.size() == 0)
+                return "";
+            return col.get(0);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    // Returns name of pet as String
+    public static String getPetName(String custID) {
+        connect();
+        try {
+            PreparedStatement ps = con.prepareStatement("select Pet_name from tblPet where Customer_ID = '"+custID+"'");
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            return rs.getString(1);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 }
