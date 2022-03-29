@@ -297,11 +297,11 @@ public class tabWeekly {
         phone.setOnKeyPressed(event -> {
             if (event.getCode().equals(KeyCode.ENTER)) {
                 if (customerInDB) {
-                    popUp.popText("Customer found!", "black", "18", Application.stage);
+                    popUp.popText("Customer found!", "black", "18", dialog);
                     name.setText("GET NAME FROM DB WHERE NUMBER = THIS");
                     petName.setText("GET NAME FROM DB WHERE NUMBER = THIS");
                 } else {
-                    popUp.popText("Customer not in database!", "black", "18", Application.stage);
+                    popUp.popText("Customer not in database!", "black", "18", dialog);
                 }
             }
         });
@@ -333,7 +333,6 @@ public class tabWeekly {
                     "easvanimalshelter@gmail.com",
                     "Receipt for booking",
                     "Dear + name + we are pleased to inform you that your booking for the + week + is confirmed"
-                    + mailSender.signatur()
             );
         });
 

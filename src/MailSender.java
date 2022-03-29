@@ -28,7 +28,7 @@ public class MailSender {
             MimeMessage m = new MimeMessage(s);
             m.addRecipient(Message.RecipientType.TO,new InternetAddress(to));
             m.setSubject(sub);
-            m.setText(msg);
+            m.setText(msg+"\n\n\nYours Sincerely\n\nEASV Animal Shelter");
             //send the message
             Transport.send(m);
             System.out.println("Message sent successfully");
@@ -37,11 +37,5 @@ public class MailSender {
         } catch (MessagingException e) {
             e.printStackTrace();
         }
-    }
-
-    public String signatur() {
-
-        return "\n\n\nYours Sincerely\n\nEASV Animal Shelter";
-
     }
 }
