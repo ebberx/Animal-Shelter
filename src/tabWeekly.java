@@ -326,6 +326,15 @@ public class tabWeekly {
             dialog.close();
             popUp.popText("Booking saved!", "black", "18", Application.stage);
             //saveNewEmployee();
+
+            // Send receipt as mail
+            MailSender mailSender = new MailSender();
+            mailSender.send(
+                    "easvanimalshelter@gmail.com",
+                    "Receipt for booking",
+                    "Dear + name + we are pleased to inform you that your booking for the + week + is confirmed"
+                    + mailSender.signatur()
+            );
         });
 
         // Add cancel button
