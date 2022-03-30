@@ -156,7 +156,6 @@ public class Overview {
     public void addButtons(GridPane gridPane) {
 
         occupiedCages = DB.occupiedCages(chosenWeek);
-        System.out.println(occupiedCages);
         for (int row = 1; row < gridPane.getRowConstraints().size(); row++) {
             for (int col = 1; col < gridPane.getColumnConstraints().size(); col++) {
 
@@ -180,6 +179,7 @@ public class Overview {
                 gridPane.add(buttonBook, col, row);
             }
         }
+        updateDate();
     }
     public void addSpots(GridPane gridPane) {
 
@@ -202,13 +202,11 @@ public class Overview {
         subTitle.setText("Week " + chosenWeek);
         popUp.popText("Week " + chosenWeek + "\nYear " + chosenYear, "black", "18", Application.stage);
 
-
-        System.out.println(chosenWeek);
         occupiedCages = DB.occupiedCages(chosenWeek);
-        for (Button weekday : bookingButtons) {
+        for (Button button : bookingButtons) {
 
-            weekday.setText("Available");
-            weekday.setStyle("-fx-background-color: #7FFFBF;  -fx-border-color: #FFF2F2; -fx-cursor: HAND");
+            button.setText("Available");
+            button.setStyle("-fx-background-color: #7FFFBF;  -fx-border-color: #FFF2F2; -fx-cursor: HAND");
 
         }
         for (int i = 0; i < occupiedCages; i++) {
@@ -310,9 +308,9 @@ public class Overview {
         spot.getItems().addAll("1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
         //gridPane.add(spot, 1, 4);
 
-        TextField textFieldSpot = new TextField();
-        textFieldSpot.setMaxWidth(Double.MAX_VALUE);
-        gridPane.add(textFieldSpot, 1, 4);
+        TextField textFieldWeek = new TextField(String.valueOf(chosenWeek));
+        textFieldWeek.setMaxWidth(Double.MAX_VALUE);
+        gridPane.add(textFieldWeek, 1, 4);
 
         TextArea comments = new TextArea();
         comments.setMaxWidth(Double.MAX_VALUE);
@@ -362,7 +360,7 @@ public class Overview {
             int petID = DB.insertPet(petName.getText(), custID);
             // insert booking
             DB.saveBooking(chosenWeek, petID, 1);
-
+            updateDate();
             dialog.close();
             popUp.popText("Booking saved!", "black", "18", Application.stage);
 
