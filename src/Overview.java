@@ -58,14 +58,6 @@ public class Overview {
         HBox hBoxLeft = new HBox(5);
         HBox.setHgrow(hBoxLeft, Priority.ALWAYS);
         hBoxLeft.setAlignment(Pos.CENTER_LEFT);
-
-        // Button for Saving
-        Button buttonSave = new Button("Save");
-        buttonSave.setOnAction(event -> {
-            popUp.popText("Saved!", "black", "18", Application.stage);
-        });
-
-        hBoxLeft.getChildren().addAll(buttonSave);
         toolBar.getItems().add(hBoxLeft);
 
         // Button for creating a new Booking
@@ -144,14 +136,18 @@ public class Overview {
     public void addCategoryLabels(GridPane gridPane) {
 
         Label labelSpot = new Label("Spot");
-        labelSpot.setStyle("-fx-font-weight: 800");
+        labelSpot.setStyle("-fx-font-weight: 800; -fx-background-color: #add8e6; -fx-alignment: CENTER");
         GridPane.setHalignment(labelSpot, HPos.CENTER);
+        labelSpot.setMaxWidth(Double.MAX_VALUE);
+        labelSpot.setMaxHeight(Double.MAX_VALUE);
 
         gridPane.add(labelSpot, 0, 0);
 
         Label labelStatus = new Label("Status");
-        labelStatus.setStyle("-fx-font-weight: 800");
+        labelStatus.setStyle("-fx-font-weight: 800; -fx-background-color: #add8e6; -fx-alignment: CENTER");
         GridPane.setHalignment(labelStatus, HPos.CENTER);
+        labelStatus.setMaxWidth(Double.MAX_VALUE);
+        labelStatus.setMaxHeight(Double.MAX_VALUE);
 
         gridPane.add(labelStatus, 1, 0);
 
@@ -372,10 +368,8 @@ public class Overview {
             mailSender.send(
                     mail.getText(),
                     "Receipt for booking",
-                    "Dear "+name.getText()+"\n\n we are pleased to inform you that your booking for week "+chosenWeek+" is confirmed.\n" +
-                            "We are looking forward to taking care of " + petName.getText() + "\n\n" +
-                            "Yours Sincerely\n" +
-                            "EASV Animal Shelter"
+                    "Dear "+name.getText()+"\n\nWe are pleased to inform you that your booking for week "+chosenWeek+" is confirmed.\n" +
+                            "We are looking forward to taking care of " + petName.getText() + "."
             );
         });
 

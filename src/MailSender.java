@@ -28,7 +28,7 @@ public class MailSender {
             MimeMessage m = new MimeMessage(s);
             m.addRecipient(Message.RecipientType.TO,new InternetAddress(to));
             m.setSubject(sub);
-            m.setText(msg+"\n\n\nYours Sincerely\n\nEASV Animal Shelter");
+            m.setText(msg+"\n\nYours Sincerely\n\nEASV Animal Shelter\nP: +45 20304060\nA: Alsion 4, 6400 Sønderborg");
             //send the message
             Transport.send(m);
             System.out.println("Message sent successfully");
