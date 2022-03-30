@@ -1,8 +1,12 @@
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 import javax.xml.transform.Result;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Properties;
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -57,10 +61,25 @@ public class DB {
     public static int availableCages(int week) {
         connect();
         try {
-            PreparedStatement ps = con.prepareStatement("exec CalculateVacantCagesWeek "+ week + ", 1");
+            PreparedStatement ps = con.prepareStatement("exec CalcAvailable "+ week);
             ResultSet rs = ps.executeQuery();
             rs.next();
-            return Integer.parseInt(rs.getString(1));
+            return rs.getInt(1);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        disconnect();
+        return -1;
+    }
+
+    public static int occupiedCages(int week) {
+        connect();
+        try {
+            PreparedStatement ps = con.prepareStatement("SELECT COUNT(Week_no) FROM tblBooking WHERE Week_no = " + week);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            return rs.getInt(1);
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -110,5 +129,49 @@ public class DB {
             e.printStackTrace();
         }
         return "";
+    }
+
+    public static int saveBooking (int week, int petID, int shelterID) {
+        connect();
+        try {
+            PreparedStatement ps = con.prepareStatement("exec insert_booking "+ week + ", 1");
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            return Integer.parseInt(rs.getString(1));
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        disconnect();
+        return -1;
+    }
+
+    public static ObservableList<String> getAllBookings() {
+        connect();
+        ObservableList<String> observableList = null;
+        try {
+            String sql = "SELECT * from tblBooking";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            // Init Arraylist
+            ArrayList<String> bookings = new ArrayList<>();
+
+            while (rs.next()) {
+                bookings.add(rs.getString("Booking_ID"));
+            }
+
+            // Now add observability by wrapping it with ObservableList.
+            observableList = FXCollections.observableList(bookings);
+
+            rs.close();
+            ps.close();
+            return observableList;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        disconnect();
+        return observableList;
     }
 }
