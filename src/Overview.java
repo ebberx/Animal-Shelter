@@ -170,13 +170,16 @@ public class Overview {
 
                 for (int i = 0; i < occupiedCages; i++) {
                     buttonBook.setText("Occupied");
+                    buttonBook.setStyle("-fx-background-color: null");
                 }
 
                 buttonBook.setMaxWidth(Double.MAX_VALUE);
                 buttonBook.setMaxHeight(Double.MAX_VALUE);
 
                 buttonBook.setOnAction(event -> {
-                    createBooking();
+                    if (buttonBook.getText().equalsIgnoreCase("available")) {
+                        createBooking();
+                    }
                 });
                 gridPane.add(buttonBook, col, row);
             }
@@ -206,11 +209,13 @@ public class Overview {
         for (Button weekday : bookingButtons) {
 
             weekday.setText("Available");
+            weekday.setStyle("-fx-background-color: null; -fx-cursor: HAND");
 
         }
         for (int i = 0; i < occupiedCages; i++) {
 
             bookingButtons.get(i).setText("Occupied");
+            bookingButtons.get(i).setStyle("-fx-background-color: null");
 
         }
     }
@@ -322,10 +327,11 @@ public class Overview {
                 if (customer != "") {
                     popUp.popText("Customer found!", "black", "18", dialog);
 
-                    // ID|Customer_Name|Customer_Address|Customer_Phone
+                    // ID|Customer_Name|Customer_Address|Customer_Phone|Customer_Mail
                     String[] custInfo = customer.split("\\|");
                     String custPetName = DB.getPetName(custInfo[0]); // Get pet name from db
 
+                    mail.setText(custInfo[4]);
                     name.setText(custInfo[1]);
                     petName.setText(custPetName);
                 } else {
@@ -358,9 +364,12 @@ public class Overview {
             // Send receipt as mail
             MailSender mailSender = new MailSender();
             mailSender.send(
-                    "easvanimalshelter@gmail.com",
+                    mail.getText(),
                     "Receipt for booking",
-                    "Dear + name + we are pleased to inform you that your booking for the + week + is confirmed"
+                    "Dear "+name.getText()+"\n\n we are pleased to inform you that your booking for week "+chosenWeek+" is confirmed.\n" +
+                            "We are looking forward to taking care of " + petName.getText() + "\n\n" +
+                            "Yours Sincerely\n" +
+                            "EASV Animal Shelter"
             );
         });
 
