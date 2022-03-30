@@ -11,27 +11,28 @@ import javafx.stage.Stage;
 import java.sql.SQLException;
 import java.util.*;
 
-public class tabWeekly {
+public class Overview {
 
     DateGenerator date = new DateGenerator();
 
     private GridPane gridPane;
     PopUpText popUp = new PopUpText();
+    static int occupiedCages = 0;
     static int chosenWeek = 13;
     static int chosenYear = 2022;
     static String chosenShelter = "EASV Shelter";
     static Label title, subTitle;
+    ArrayList<Button> bookingButtons = new ArrayList<>();
 
-    public tabWeekly() {
+    public Overview() {
 
     }
 
-    public VBox getTabWeekly(Tab tab) throws SQLException {
+    public VBox getOverview() throws SQLException {
 
         VBox vBox = new VBox();
-        //vBox.setStyle("-fx-background-color: #f5f5f5");
+        vBox.setStyle("-fx-background-color: #f5f5f5");
         vBox.setAlignment(Pos.CENTER);
-        tab.setContent(vBox);
 
         title = new Label(chosenShelter);
         title.setStyle("-fx-font-size: 24");
@@ -157,11 +158,19 @@ public class tabWeekly {
     }
 
     public void addButtons(GridPane gridPane) {
+
+        occupiedCages = DB.occupiedCages(chosenWeek);
+        System.out.println(occupiedCages);
         for (int row = 1; row < gridPane.getRowConstraints().size(); row++) {
             for (int col = 1; col < gridPane.getColumnConstraints().size(); col++) {
 
                 Button buttonBook = new Button("Available");
+                bookingButtons.add(buttonBook);
                 buttonBook.setStyle("-fx-background-color: null; -fx-cursor: HAND");
+
+                for (int i = 0; i < occupiedCages; i++) {
+                    buttonBook.setText("Occupied");
+                }
 
                 buttonBook.setMaxWidth(Double.MAX_VALUE);
                 buttonBook.setMaxHeight(Double.MAX_VALUE);
@@ -189,14 +198,27 @@ public class tabWeekly {
 
         title.setText(chosenShelter);
         subTitle.setText("Week " + chosenWeek);
-
         popUp.popText("Week " + chosenWeek + "\nYear " + chosenYear, "black", "18", Application.stage);
+
+
+        System.out.println(chosenWeek);
+        occupiedCages = DB.occupiedCages(chosenWeek);
+        for (Button weekday : bookingButtons) {
+
+            weekday.setText("Available");
+
+        }
+        for (int i = 0; i < occupiedCages; i++) {
+
+            bookingButtons.get(i).setText("Occupied");
+
+        }
     }
 
     private void createBooking() {
 
         final double dialogWidth = 450;
-        final double dialogHeight = 450;
+        final double dialogHeight = 425;
 
         // Starting procedures and Set the Scene
         final Stage dialog = new Stage();
@@ -223,7 +245,7 @@ public class tabWeekly {
 
         // Dimensions of GridPane
         final int numCols = 2 ;
-        final int numRows = 7 ;
+        final int numRows = 6 ;
 
         // Sets the width of the first column
         ColumnConstraints colConst0 = new ColumnConstraints(150);
@@ -235,7 +257,7 @@ public class tabWeekly {
 
         // Sets the height of all rows
         for (int i = 0; i < numRows-2; i++) {
-            RowConstraints rowConst = new RowConstraints(40);
+            RowConstraints rowConst = new RowConstraints(50);
             gridPane.getRowConstraints().add(rowConst);
         }
         for (int i = numRows-2; i < numRows; i++) {
@@ -257,9 +279,8 @@ public class tabWeekly {
         gridPane.add(labelMail, 0, 1);
         gridPane.add(labelName, 0, 2);
         gridPane.add(labelPetName, 0, 3);
-        gridPane.add(labelSpot, 0, 4);
-        gridPane.add(labelWeek, 0, 5);
-        gridPane.add(labelNotes, 0, 6);
+        gridPane.add(labelWeek, 0, 4);
+        gridPane.add(labelNotes, 0, 5);
 
         // TextField for entering phone number
         TextField phone = new TextField();
@@ -283,15 +304,15 @@ public class tabWeekly {
         ChoiceBox<String> spot = new ChoiceBox<>();
         spot.setMaxWidth(Double.MAX_VALUE);
         spot.getItems().addAll("1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
-        gridPane.add(spot, 1, 4);
+        //gridPane.add(spot, 1, 4);
 
         TextField textFieldSpot = new TextField();
         textFieldSpot.setMaxWidth(Double.MAX_VALUE);
-        gridPane.add(textFieldSpot, 1, 5);
+        gridPane.add(textFieldSpot, 1, 4);
 
         TextArea comments = new TextArea();
         comments.setMaxWidth(Double.MAX_VALUE);
-        gridPane.add(comments, 1, 6);
+        gridPane.add(comments, 1, 5);
 
         phone.setOnKeyPressed(event -> {
             if (event.getCode().equals(KeyCode.ENTER)) {
@@ -330,9 +351,9 @@ public class tabWeekly {
         // On button click, call this method
         buttonSaveAndExit.setOnAction(event -> {
             // TODO SOME COOL DB STUFF
+            saveBooking();
             dialog.close();
             popUp.popText("Booking saved!", "black", "18", Application.stage);
-            //saveNewEmployee();
 
             // Send receipt as mail
             MailSender mailSender = new MailSender();
@@ -344,7 +365,7 @@ public class tabWeekly {
         });
 
         // Add cancel button
-        Button buttonExit = new Button("Annuller");
+        Button buttonExit = new Button("Cancel");
         hBoxSaveAndExit.getChildren().add(buttonExit);
         buttonExit.setOnAction(event -> {
             dialog.close();
@@ -353,5 +374,11 @@ public class tabWeekly {
         // Initialize Window
         dialog.setScene(dialogScene);
         dialog.show();
+    }
+
+    public void saveBooking() {
+
+        System.out.println("THIS SHOULD SAVE");
+
     }
 }

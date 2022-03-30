@@ -1,3 +1,4 @@
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.print.*;
@@ -63,6 +64,14 @@ public class tabBookings {
         column5.setMinWidth(200);
 
         tableView.getColumns().addAll(column1, column2, column3, column4, column5);
+
+        ObservableList<String> bookings = DB.getAllBookings();
+
+        for (int i = 0; i < bookings.size(); i++) {
+
+            tableView.getItems().add(bookings.get(i));
+
+        }
 
         return tableView;
 
