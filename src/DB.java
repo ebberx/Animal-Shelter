@@ -131,10 +131,41 @@ public class DB {
         return "";
     }
 
-    public static void insertCustomer(String custName, String custAddr, String custPhone, String custEmail) {
+    // Inserts pet if it does not exist and returns pet id
+    public static int insertPet(String petName, int custID) {
         connect();
         try {
-            PreparedStatement ps = con.prepareStatement("exec insert_customer '"+custName+"', '"+custAddr+"', '"+custPhone+"', '"+custEmail+"'");
+            PreparedStatement ps = con.prepareStatement("exec insert_pet '"+petName+"', " + custID);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            return rs.getInt(1);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    // Inserts customer if it does not exist and returns customer id
+    public static int insertCustomer(String custName, String custAddr, String custPhone, String custEmail) {
+        connect();
+        try {
+            PreparedStatement ps = con.prepareStatement("exec insert_customer '"+custName+"', '"+custAddr+"', "+custPhone+", '"+custEmail+"'");
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            return rs.getInt(1);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        disconnect();
+        return -1;
+    }
+
+    public static void saveBooking (int week, int petID, int shelterID) {
+        connect();
+        try {
+            PreparedStatement ps = con.prepareStatement("exec insert_booking "+ week +", "+petID+", "+shelterID);
             ps.execute();
             return;
         }
@@ -142,21 +173,6 @@ public class DB {
             e.printStackTrace();
         }
         disconnect();
-    }
-
-    public static int saveBooking (int week, int petID, int shelterID) {
-        connect();
-        try {
-            PreparedStatement ps = con.prepareStatement("exec insert_booking "+ week +", 1");
-            ResultSet rs = ps.executeQuery();
-            rs.next();
-            return Integer.parseInt(rs.getString(1));
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        disconnect();
-        return -1;
     }
 
     public static ObservableList<String> getAllBookings() {

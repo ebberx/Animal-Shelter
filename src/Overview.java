@@ -355,13 +355,13 @@ public class Overview {
 
         // On button click, call this method
         buttonSaveAndExit.setOnAction(event -> {
-            // Insert pet if not exist
-            // get pet id
 
             // insert customer if not exist
-            
+            int custID = DB.insertCustomer(name.getText(), "UGYLDIGVEJ 2", phone.getText(), mail.getText());
+            // Insert pet if not exist && get pet id
+            int petID = DB.insertPet(petName.getText(), custID);
             // insert booking
-            //DB.saveBooking(chosenWeek, petID, 1);
+            DB.saveBooking(chosenWeek, petID, 1);
 
             dialog.close();
             popUp.popText("Booking saved!", "black", "18", Application.stage);
