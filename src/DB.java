@@ -131,10 +131,23 @@ public class DB {
         return "";
     }
 
+    public static void insertCustomer(String custName, String custAddr, String custPhone, String custEmail) {
+        connect();
+        try {
+            PreparedStatement ps = con.prepareStatement("exec insert_customer '"+custName+"', '"+custAddr+"', '"+custPhone+"', '"+custEmail+"'");
+            ps.execute();
+            return;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        disconnect();
+    }
+
     public static int saveBooking (int week, int petID, int shelterID) {
         connect();
         try {
-            PreparedStatement ps = con.prepareStatement("exec insert_booking "+ week + ", 1");
+            PreparedStatement ps = con.prepareStatement("exec insert_booking "+ week +", 1");
             ResultSet rs = ps.executeQuery();
             rs.next();
             return Integer.parseInt(rs.getString(1));

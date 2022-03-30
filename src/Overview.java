@@ -356,8 +356,14 @@ public class Overview {
 
         // On button click, call this method
         buttonSaveAndExit.setOnAction(event -> {
-            // TODO SOME COOL DB STUFF
-            saveBooking();
+            // Insert pet if not exist
+            // get pet id
+
+            // insert customer if not exist
+            
+            // insert booking
+            //DB.saveBooking(chosenWeek, petID, 1);
+
             dialog.close();
             popUp.popText("Booking saved!", "black", "18", Application.stage);
 
@@ -383,11 +389,5 @@ public class Overview {
         // Initialize Window
         dialog.setScene(dialogScene);
         dialog.show();
-    }
-
-    public void saveBooking() {
-
-        System.out.println("THIS SHOULD SAVE");
-
     }
 }
