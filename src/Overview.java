@@ -101,12 +101,12 @@ public class Overview {
 
     public GridPane getGridPane() throws SQLException {
         gridPane = new GridPane();
-        gridPane.setGridLinesVisible(true);
+        gridPane.setGridLinesVisible(false);
         gridPane.setPadding(new Insets(10, 10, 10, 10));
         VBox.setMargin(gridPane, new Insets(5, 5, 5, 5));
 
         final int numCols = 2;
-        final int numRows = 12;
+        final int numRows = 11;
 
         for (int i = 0; i < numCols; i++) {
             ColumnConstraints colConst = new ColumnConstraints();
@@ -136,7 +136,7 @@ public class Overview {
     public void addCategoryLabels(GridPane gridPane) {
 
         Label labelSpot = new Label("Spot");
-        labelSpot.setStyle("-fx-font-weight: 800; -fx-background-color: #add8e6; -fx-alignment: CENTER");
+        labelSpot.setStyle("-fx-font-weight: 800; -fx-background-color: #add8e6; -fx-border-color: #FFF2F2; -fx-alignment: CENTER");
         GridPane.setHalignment(labelSpot, HPos.CENTER);
         labelSpot.setMaxWidth(Double.MAX_VALUE);
         labelSpot.setMaxHeight(Double.MAX_VALUE);
@@ -144,7 +144,7 @@ public class Overview {
         gridPane.add(labelSpot, 0, 0);
 
         Label labelStatus = new Label("Status");
-        labelStatus.setStyle("-fx-font-weight: 800; -fx-background-color: #add8e6; -fx-alignment: CENTER");
+        labelStatus.setStyle("-fx-font-weight: 800; -fx-background-color: #add8e6; -fx-border-color: #FFF2F2; -fx-alignment: CENTER");
         GridPane.setHalignment(labelStatus, HPos.CENTER);
         labelStatus.setMaxWidth(Double.MAX_VALUE);
         labelStatus.setMaxHeight(Double.MAX_VALUE);
@@ -162,11 +162,11 @@ public class Overview {
 
                 Button buttonBook = new Button("Available");
                 bookingButtons.add(buttonBook);
-                buttonBook.setStyle("-fx-background-color: null; -fx-cursor: HAND");
+                buttonBook.setStyle("-fx-background-color: #7FFFBF; -fx-border-color: #FFF2F2; -fx-cursor: HAND");
 
                 for (int i = 0; i < occupiedCages; i++) {
                     buttonBook.setText("Occupied");
-                    buttonBook.setStyle("-fx-background-color: null");
+                    buttonBook.setStyle("-fx-background-color: #FF7F7F; -fx-border-color: #FFF2F2");
                 }
 
                 buttonBook.setMaxWidth(Double.MAX_VALUE);
@@ -187,6 +187,9 @@ public class Overview {
         for (int row = 1; row < gridPane.getRowConstraints().size(); row++) {
 
             Label labelSpot = new Label("Spot #" + no++);
+            labelSpot.setStyle("-fx-background-color: #CFCFC4 ; -fx-border-color: #FFF2F2; -fx-alignment: CENTER");
+            labelSpot.setMaxWidth(Double.MAX_VALUE);
+            labelSpot.setMaxHeight(Double.MAX_VALUE);
             GridPane.setHalignment(labelSpot, HPos.CENTER);
             gridPane.add(labelSpot, 0, row);
 
@@ -205,13 +208,13 @@ public class Overview {
         for (Button weekday : bookingButtons) {
 
             weekday.setText("Available");
-            weekday.setStyle("-fx-background-color: null; -fx-cursor: HAND");
+            weekday.setStyle("-fx-background-color: #7FFFBF;  -fx-border-color: #FFF2F2; -fx-cursor: HAND");
 
         }
         for (int i = 0; i < occupiedCages; i++) {
 
             bookingButtons.get(i).setText("Occupied");
-            bookingButtons.get(i).setStyle("-fx-background-color: null");
+            bookingButtons.get(i).setStyle("-fx-background-color: #FF7F7F; -fx-border-color: #FFF2F2");
 
         }
     }
