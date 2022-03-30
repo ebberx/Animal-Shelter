@@ -58,14 +58,6 @@ public class Overview {
         HBox hBoxLeft = new HBox(5);
         HBox.setHgrow(hBoxLeft, Priority.ALWAYS);
         hBoxLeft.setAlignment(Pos.CENTER_LEFT);
-
-        // Button for Saving
-        Button buttonSave = new Button("Save");
-        buttonSave.setOnAction(event -> {
-            popUp.popText("Saved!", "black", "18", Application.stage);
-        });
-
-        hBoxLeft.getChildren().addAll(buttonSave);
         toolBar.getItems().add(hBoxLeft);
 
         // Button for creating a new Booking
@@ -109,12 +101,12 @@ public class Overview {
 
     public GridPane getGridPane() throws SQLException {
         gridPane = new GridPane();
-        gridPane.setGridLinesVisible(true);
+        gridPane.setGridLinesVisible(false);
         gridPane.setPadding(new Insets(10, 10, 10, 10));
         VBox.setMargin(gridPane, new Insets(5, 5, 5, 5));
 
         final int numCols = 2;
-        final int numRows = 12;
+        final int numRows = 11;
 
         for (int i = 0; i < numCols; i++) {
             ColumnConstraints colConst = new ColumnConstraints();
@@ -144,14 +136,18 @@ public class Overview {
     public void addCategoryLabels(GridPane gridPane) {
 
         Label labelSpot = new Label("Spot");
-        labelSpot.setStyle("-fx-font-weight: 800");
+        labelSpot.setStyle("-fx-font-weight: 800; -fx-background-color: #add8e6; -fx-border-color: #FFF2F2; -fx-alignment: CENTER");
         GridPane.setHalignment(labelSpot, HPos.CENTER);
+        labelSpot.setMaxWidth(Double.MAX_VALUE);
+        labelSpot.setMaxHeight(Double.MAX_VALUE);
 
         gridPane.add(labelSpot, 0, 0);
 
         Label labelStatus = new Label("Status");
-        labelStatus.setStyle("-fx-font-weight: 800");
+        labelStatus.setStyle("-fx-font-weight: 800; -fx-background-color: #add8e6; -fx-border-color: #FFF2F2; -fx-alignment: CENTER");
         GridPane.setHalignment(labelStatus, HPos.CENTER);
+        labelStatus.setMaxWidth(Double.MAX_VALUE);
+        labelStatus.setMaxHeight(Double.MAX_VALUE);
 
         gridPane.add(labelStatus, 1, 0);
 
@@ -166,11 +162,11 @@ public class Overview {
 
                 Button buttonBook = new Button("Available");
                 bookingButtons.add(buttonBook);
-                buttonBook.setStyle("-fx-background-color: null; -fx-cursor: HAND");
+                buttonBook.setStyle("-fx-background-color: #7FFFBF; -fx-border-color: #FFF2F2; -fx-cursor: HAND");
 
                 for (int i = 0; i < occupiedCages; i++) {
                     buttonBook.setText("Occupied");
-                    buttonBook.setStyle("-fx-background-color: null");
+                    buttonBook.setStyle("-fx-background-color: #FF7F7F; -fx-border-color: #FFF2F2");
                 }
 
                 buttonBook.setMaxWidth(Double.MAX_VALUE);
@@ -191,6 +187,9 @@ public class Overview {
         for (int row = 1; row < gridPane.getRowConstraints().size(); row++) {
 
             Label labelSpot = new Label("Spot #" + no++);
+            labelSpot.setStyle("-fx-background-color: #CFCFC4 ; -fx-border-color: #FFF2F2; -fx-alignment: CENTER");
+            labelSpot.setMaxWidth(Double.MAX_VALUE);
+            labelSpot.setMaxHeight(Double.MAX_VALUE);
             GridPane.setHalignment(labelSpot, HPos.CENTER);
             gridPane.add(labelSpot, 0, row);
 
@@ -209,13 +208,13 @@ public class Overview {
         for (Button weekday : bookingButtons) {
 
             weekday.setText("Available");
-            weekday.setStyle("-fx-background-color: null; -fx-cursor: HAND");
+            weekday.setStyle("-fx-background-color: #7FFFBF;  -fx-border-color: #FFF2F2; -fx-cursor: HAND");
 
         }
         for (int i = 0; i < occupiedCages; i++) {
 
             bookingButtons.get(i).setText("Occupied");
-            bookingButtons.get(i).setStyle("-fx-background-color: null");
+            bookingButtons.get(i).setStyle("-fx-background-color: #FF7F7F; -fx-border-color: #FFF2F2");
 
         }
     }
@@ -372,10 +371,8 @@ public class Overview {
             mailSender.send(
                     mail.getText(),
                     "Receipt for booking",
-                    "Dear "+name.getText()+"\n\n we are pleased to inform you that your booking for week "+chosenWeek+" is confirmed.\n" +
-                            "We are looking forward to taking care of " + petName.getText() + "\n\n" +
-                            "Yours Sincerely\n" +
-                            "EASV Animal Shelter"
+                    "Dear "+name.getText()+"\n\nWe are pleased to inform you that your booking for week "+chosenWeek+" is confirmed.\n" +
+                            "We are looking forward to taking care of " + petName.getText() + "."
             );
         });
 
