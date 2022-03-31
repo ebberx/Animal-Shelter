@@ -40,10 +40,10 @@ public class DB {
             System.err.println(e.getMessage());
         }
     }
-    private static void connect(){
+    public static void connect(){
         try {
             con = DriverManager.getConnection("jdbc:sqlserver://"+host+":"+port+";databaseName="+databaseName,userName,password);
-            System.out.println("connected to db");
+            //System.out.println("connected to db");
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
@@ -77,6 +77,21 @@ public class DB {
         connect();
         try {
             PreparedStatement ps = con.prepareStatement("SELECT COUNT(Week_no) FROM tblBooking WHERE Week_no = " + week);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            return rs.getInt(1);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        disconnect();
+        return -1;
+    }
+
+    public static int occupiedCagesDates(Date date) {
+        connect();
+        try {
+            PreparedStatement ps = con.prepareStatement("SELECT COUNT(Date) FROM tblBookingDate WHERE Date = '" + date + "'");
             ResultSet rs = ps.executeQuery();
             rs.next();
             return rs.getInt(1);
@@ -166,6 +181,19 @@ public class DB {
         connect();
         try {
             PreparedStatement ps = con.prepareStatement("exec insert_booking "+ week +", "+petID+", "+shelterID);
+            ps.execute();
+            return;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        disconnect();
+    }
+
+    public static void saveBookingDates (String date, int petID, int shelterID) {
+        connect();
+        try {
+            PreparedStatement ps = con.prepareStatement("exec insert_booking_date '"+ date +"', "+petID+", "+shelterID);
             ps.execute();
             return;
         }

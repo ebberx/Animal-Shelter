@@ -1,12 +1,13 @@
 import javafx.animation.PauseTransition;
+import javafx.animation.RotateTransition;
 import javafx.scene.control.Label;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class PopUpText {
+public class PopUp {
 
-    public PopUpText() {
+    public PopUp() {
 
     }
 
@@ -30,7 +31,6 @@ public class PopUpText {
             delay.play();
 
         } catch (Exception e) {
-
         }
     }
 }

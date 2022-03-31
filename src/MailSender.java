@@ -32,7 +32,7 @@ public class MailSender {
             //send the message
             Transport.send(m);
             System.out.println("Message sent successfully");
-            PopUpText popUpText = new PopUpText();
+            PopUp popUpText = new PopUp();
             popUpText.popText("Receipt send!", "black", "18", Application.stage);
         } catch (MessagingException e) {
             e.printStackTrace();
