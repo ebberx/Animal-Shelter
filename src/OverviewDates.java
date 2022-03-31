@@ -1,3 +1,6 @@
+import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -9,23 +12,27 @@ import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.*;
 
-public class Overview {
+public class OverviewDates {
 
     DateGenerator date = new DateGenerator();
 
     private GridPane gridPane;
     PopUp popUp = new PopUp();
-    static int occupiedCages = 0;
+    static int startingPoint = 0;
     static int chosenWeek = 13;
     static int chosenYear = 2022;
+
+    String chosenDate = "2022-04-01";
     static String chosenShelter = "EASV Shelter";
-    static Label title, subTitle;
+    static Label title, subTitle, labelMon, labelTue, labelWed, labelThu, labelFri, labelSat, labelSun;
+    ArrayList<Label> weekdays = new ArrayList<>();
     ArrayList<Button> bookingButtons = new ArrayList<>();
 
-    public Overview() {
+    public OverviewDates() {
 
     }
 
@@ -62,16 +69,16 @@ public class Overview {
         toolBar.getItems().add(hBoxLeft);
 
         // Button for creating changing the scene
-        Button buttonChange = new Button("Switch to dates");
+        Button buttonChange = new Button("Switch to weeks");
         hBoxLeft.getChildren().add(buttonChange);
 
-        // Enabling Scene changing
-        OverviewDates od = new OverviewDates();
+        // Enabling this option
+        Overview originalOverview = new Overview();
 
         // On button click, call this method
         buttonChange.setOnAction(event -> {
             try {
-                Application.borderPane.setCenter(od.getOverview());
+                Application.borderPane.setCenter(originalOverview.getOverview());
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -99,6 +106,7 @@ public class Overview {
         textFieldWeek.setOnAction(event -> {
             chosenWeek = Integer.parseInt(textFieldWeek.getText());
             updateDate();
+            System.out.println("UPDATED WEEK");
         });
 
         Label labelYear = new Label("Year: ");
@@ -122,7 +130,7 @@ public class Overview {
         gridPane.setPadding(new Insets(10, 10, 10, 10));
         VBox.setMargin(gridPane, new Insets(5, 5, 5, 5));
 
-        final int numCols = 2;
+        final int numCols = 8;
         final int numRows = 11;
 
         for (int i = 0; i < numCols; i++) {
@@ -143,6 +151,7 @@ public class Overview {
 
     public void addCollectedContent(GridPane gridPane) throws SQLException {
 
+        addDates(gridPane);
         addButtons(gridPane);
         addCategoryLabels(gridPane);
         addSpots(gridPane);
@@ -159,20 +168,66 @@ public class Overview {
         labelSpot.setMaxHeight(Double.MAX_VALUE);
 
         gridPane.add(labelSpot, 0, 0);
+    }
 
-        Label labelStatus = new Label("Status");
-        labelStatus.setStyle("-fx-font-weight: 800; -fx-background-color: #add8e6; -fx-border-color: #FFF2F2; -fx-alignment: CENTER");
-        GridPane.setHalignment(labelStatus, HPos.CENTER);
-        labelStatus.setMaxWidth(Double.MAX_VALUE);
-        labelStatus.setMaxHeight(Double.MAX_VALUE);
+    public void addDates(GridPane gridPane) {
 
-        gridPane.add(labelStatus, 1, 0);
+        labelMon = new Label(date.getDate(chosenWeek, 2, chosenYear));
+        labelMon.setStyle("-fx-font-weight: 800; -fx-background-color: #add8e6; -fx-border-color: #FFF2F2; -fx-alignment: CENTER");
+        gridPane.add(labelMon, 1, 0);
+        GridPane.setHalignment(labelMon, HPos.CENTER);
+        labelMon.setMaxWidth(Double.MAX_VALUE);
+        labelMon.setMaxHeight(Double.MAX_VALUE);
+
+        labelTue = new Label(date.getDate(chosenWeek, 3, chosenYear));
+        labelTue.setStyle("-fx-font-weight: 800; -fx-background-color: #add8e6; -fx-border-color: #FFF2F2; -fx-alignment: CENTER");
+        gridPane.add(labelTue, 2, 0);
+        GridPane.setHalignment(labelTue, HPos.CENTER);
+        labelTue.setMaxWidth(Double.MAX_VALUE);
+        labelTue.setMaxHeight(Double.MAX_VALUE);
+
+        labelWed = new Label(date.getDate(chosenWeek, 4, chosenYear));
+        labelWed.setStyle("-fx-font-weight: 800; -fx-background-color: #add8e6; -fx-border-color: #FFF2F2; -fx-alignment: CENTER");
+        gridPane.add(labelWed, 3, 0);
+        GridPane.setHalignment(labelWed, HPos.CENTER);
+        labelWed.setMaxWidth(Double.MAX_VALUE);
+        labelWed.setMaxHeight(Double.MAX_VALUE);
+
+        labelThu = new Label(date.getDate(chosenWeek, 5, chosenYear));
+        labelThu.setStyle("-fx-font-weight: 800; -fx-background-color: #add8e6; -fx-border-color: #FFF2F2; -fx-alignment: CENTER");
+        gridPane.add(labelThu, 4, 0);
+        GridPane.setHalignment(labelThu, HPos.CENTER);
+        labelThu.setMaxWidth(Double.MAX_VALUE);
+        labelThu.setMaxHeight(Double.MAX_VALUE);
+
+        labelFri = new Label(date.getDate(chosenWeek, 6, chosenYear));
+        labelFri.setStyle("-fx-font-weight: 800; -fx-background-color: #add8e6; -fx-border-color: #FFF2F2; -fx-alignment: CENTER");
+        gridPane.add(labelFri, 5, 0);
+        GridPane.setHalignment(labelFri, HPos.CENTER);
+        labelFri.setMaxWidth(Double.MAX_VALUE);
+        labelFri.setMaxHeight(Double.MAX_VALUE);
+
+        labelSat = new Label(date.getDate(chosenWeek, 7, chosenYear));
+        labelSat.setStyle("-fx-font-weight: 800; -fx-background-color: #add8e6; -fx-border-color: #FFF2F2; -fx-alignment: CENTER");
+        gridPane.add(labelSat, 6, 0);
+        GridPane.setHalignment(labelSat, HPos.CENTER);
+        labelSat.setMaxWidth(Double.MAX_VALUE);
+        labelSat.setMaxHeight(Double.MAX_VALUE);
+
+        labelSun = new Label(date.getDate(chosenWeek, 1, chosenYear));
+        labelSun.setStyle("-fx-font-weight: 800; -fx-background-color: #add8e6; -fx-border-color: #FFF2F2; -fx-alignment: CENTER");
+        gridPane.add(labelSun, 7, 0);
+        GridPane.setHalignment(labelSun, HPos.CENTER);
+        labelSun.setMaxWidth(Double.MAX_VALUE);
+        labelSun.setMaxHeight(Double.MAX_VALUE);
+
+        Collections.addAll(weekdays, labelMon, labelTue, labelWed, labelThu, labelFri, labelSat, labelSun);
 
     }
 
+
     public void addButtons(GridPane gridPane) {
 
-        occupiedCages = DB.occupiedCages(chosenWeek);
         for (int row = 1; row < gridPane.getRowConstraints().size(); row++) {
             for (int col = 1; col < gridPane.getColumnConstraints().size(); col++) {
 
@@ -180,16 +235,41 @@ public class Overview {
                 bookingButtons.add(buttonBook);
                 buttonBook.setStyle("-fx-background-color: #7FFFBF; -fx-border-color: #FFF2F2; -fx-cursor: HAND");
 
-                for (int i = 0; i < occupiedCages; i++) {
-                    buttonBook.setText("Occupied");
-                    buttonBook.setStyle("-fx-background-color: #FF7F7F; -fx-border-color: #FFF2F2");
-                }
-
                 buttonBook.setMaxWidth(Double.MAX_VALUE);
                 buttonBook.setMaxHeight(Double.MAX_VALUE);
 
                 buttonBook.setOnAction(event -> {
                     if (buttonBook.getText().equalsIgnoreCase("available")) {
+
+                        Object node = event.getSource();
+                        System.out.println(node instanceof Button);
+                        Button b = (Button)node;
+
+                        for (int i = 0; i < bookingButtons.size(); i++) {
+
+                            if (bookingButtons.get(i).equals(b)) {
+                                if (i % 7 == 0) {
+                                    chosenDate = labelMon.getText();
+                                } else if (i % 7 == 1) {
+                                    chosenDate = labelTue.getText();
+                                }
+                                else if (i % 7 == 2) {
+                                    chosenDate = labelWed.getText();
+                                }
+                                else if (i % 7 == 3) {
+                                    chosenDate = labelThu.getText();
+                                }
+                                else if (i % 7 == 4) {
+                                    chosenDate = labelFri.getText();
+                                }
+                                else if (i % 7 == 5) {
+                                    chosenDate = labelSat.getText();
+                                }
+                                else {
+                                    chosenDate = labelSun.getText();
+                                }
+                            }
+                        }
                         createBooking();
                     }
                 });
@@ -213,25 +293,74 @@ public class Overview {
         }
     }
 
+    public void markDates(String date) {
+
+        int occuCages = DB.occupiedCagesDates(Date.valueOf(date));
+
+        for (int i = 0; i < weekdays.size(); i++) {
+            if ((String.valueOf(weekdays.get(i).getText())).equalsIgnoreCase(date)) {
+                System.out.println("found: " + date + "Occu cages" + occuCages);
+                startingPoint = i;
+                break;
+            }
+        }
+
+        for (int i = 1; i <= occuCages; i++) {
+
+            System.out.println("Starting point" + startingPoint + "printing" + bookingButtons.get(startingPoint));
+            bookingButtons.get(startingPoint).setText("Occupied");
+            bookingButtons.get(startingPoint).setStyle("-fx-background-color: #FF7F7F; -fx-border-color: #FFF2F2");
+            startingPoint += 7;
+
+        }
+
+    }
+
     public void updateDate() {
+
+        labelMon.setText(date.getDate(chosenWeek, 2, chosenYear));
+        labelTue.setText(date.getDate(chosenWeek, 3, chosenYear));
+        labelWed.setText(date.getDate(chosenWeek, 4, chosenYear));
+        labelThu.setText(date.getDate(chosenWeek, 5, chosenYear));
+        labelFri.setText(date.getDate(chosenWeek, 6, chosenYear));
+        labelSat.setText(date.getDate(chosenWeek, 7, chosenYear));
+        labelSun.setText(date.getDate(chosenWeek, 1, chosenYear));
 
         title.setText(chosenShelter);
         subTitle.setText("Week " + chosenWeek);
-        popUp.popText("Week " + chosenWeek + "\nYear " + chosenYear, "black", "18", Application.stage);
 
-        occupiedCages = DB.occupiedCages(chosenWeek);
         for (Button button : bookingButtons) {
 
             button.setText("Available");
             button.setStyle("-fx-background-color: #7FFFBF;  -fx-border-color: #FFF2F2; -fx-cursor: HAND");
 
         }
-        for (int i = 0; i < occupiedCages; i++) {
 
-            bookingButtons.get(i).setText("Occupied");
-            bookingButtons.get(i).setStyle("-fx-background-color: #FF7F7F; -fx-border-color: #FFF2F2");
+        markDates(labelMon.getText());
+        markDates(labelTue.getText());
+        markDates(labelWed.getText());
+        markDates(labelThu.getText());
+        markDates(labelFri.getText());
+        markDates(labelSat.getText());
+        markDates(labelSun.getText());
+
+
+        popUp.popText("Week " + chosenWeek + "\nYear " + chosenYear, "black", "18", Application.stage);
+    }
+
+    public void determineWhichButtonisClicked(Button button, Event event) {
+
+        Object node = event.getSource(); //returns the object that generated the event
+        System.out.println(node instanceof Button); //prints true. demonstrates the source is a Button
+        //since the returned object is a Button you can cast it to one
+        Button b = (Button)node;
+
+        for (int i = 0; i < bookingButtons.size(); i++) {
 
         }
+
+
+
     }
 
     private void createBooking() {
@@ -290,7 +419,7 @@ public class Overview {
         Label labelName = new Label("Name of Customer:");
         Label labelPetName = new Label("Name of Pet:");
         Label labelSpot = new Label("Spot:");
-        Label labelWeek = new Label("Week of stay:");
+        Label labelDate = new Label("Date:");
         Label labelYear = new Label("Year:");
         Label labelNotes = new Label("Notes:");
 
@@ -299,7 +428,7 @@ public class Overview {
         gridPane.add(labelMail, 0, 1);
         gridPane.add(labelName, 0, 2);
         gridPane.add(labelPetName, 0, 3);
-        gridPane.add(labelWeek, 0, 4);
+        gridPane.add(labelDate, 0, 4);
         gridPane.add(labelNotes, 0, 5);
 
         // TextField for entering phone number
@@ -322,21 +451,9 @@ public class Overview {
         petName.setMaxWidth(Double.MAX_VALUE);
         gridPane.add(petName, 1, 3);
 
-        TextField textFieldWeek = new TextField(String.valueOf(chosenWeek));
-        textFieldWeek.setMaxWidth(50);
-        gridPane.add(textFieldWeek, 1, 4);
-
-        TextField textFieldYear = new TextField(String.valueOf(chosenYear));
-        textFieldYear.setMaxWidth(50);
-        //gridPane.add(textFieldYear, 1, 4);
-
-        // HBox for Date Selection
-        HBox hBoxDate = new HBox(10);
-        hBoxDate.setAlignment(Pos.CENTER_RIGHT);
-        HBox.setHgrow(hBoxDate, Priority.ALWAYS);
-        gridPane.add(hBoxDate, 1, 4);
-
-        hBoxDate.getChildren().addAll(labelYear, textFieldYear);
+        TextField textFieldDate = new TextField(chosenDate);
+        textFieldDate.setMaxWidth(Double.MAX_VALUE);
+        gridPane.add(textFieldDate, 1, 4);
 
         TextArea comments = new TextArea();
         comments.setMaxWidth(Double.MAX_VALUE);
@@ -380,12 +497,13 @@ public class Overview {
         // On button click, call this method
         buttonSaveAndExit.setOnAction(event -> {
 
+            chosenDate = textFieldDate.getText();
             // insert customer if not exist
             int custID = DB.insertCustomer(name.getText(), "UGYLDIGVEJ 2", phone.getText(), mail.getText());
             // Insert pet if not exist && get pet id
             int petID = DB.insertPet(petName.getText(), custID);
             // insert booking
-            DB.saveBooking(chosenWeek, petID, 1);
+            DB.saveBookingDates(String.valueOf(chosenDate), petID, 1);
             updateDate();
             dialog.close();
             popUp.popText("Booking saved!", "black", "18", Application.stage);
@@ -395,7 +513,7 @@ public class Overview {
             mailSender.send(
                     mail.getText(),
                     "Receipt for booking",
-                    "Dear "+name.getText()+"\n\nWe are pleased to inform you that your booking for week "+chosenWeek+" is confirmed.\n" +
+                    "Dear "+name.getText()+"\n\nWe are pleased to inform you that your booking for the "+textFieldDate.getText()+" is confirmed.\n" +
                             "We are looking forward to taking care of " + petName.getText() + "."
             );
         });
